@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/Ashu-14-oct/polling-api/issues"
   },
-  "homepage": "https://github.com/Ashu-14-oct/polling-api#readme"
+  "homepage": "https://github.com/Ashu-14-oct/polling-api#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.1",
+    "nodemon": "^2.0.21"
+  }
 }
