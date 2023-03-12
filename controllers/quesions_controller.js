@@ -85,12 +85,41 @@ module.exports.deleteOption = async function(req, res){
 }
 
 //add votes to the options
-module.exports.addVotes = function(req, res){
+module.exports.addVotes = async function(req, res){
+    try{
+      //find the option to add votes using id
+      const option = await Option.findById(req.params.id);
+      if(!option){
+        return res.status(404).json({message: 'option not found'});
+      }
 
+      //increment the votes for the options
+      option.votes += 1;
+      await option.save();
+
+      res.status(200).json({message: 'vote added successgully'});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message: 'server error'});
+    }
 }
 
 //to view the question
-module.exports.view = function(req, res){
-    
+module.exports.view = async function(req, res){
+    try{
+      //find the question by ID
+      const question = await Question.findById(req.params.id);
+
+      //check if question exists
+      if(!question){
+        return res.status(404).json({message: 'Question not found'});
+      }
+
+      //return the question
+      res.status(200).json(question);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message: 'Server error'});
+    }
 }
   
