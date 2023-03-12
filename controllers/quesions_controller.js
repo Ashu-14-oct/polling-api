@@ -32,13 +32,56 @@ module.exports.create = async function(req, res){
 };
 
 //question deletion endpoint
-module.exports.delete = function(req, res){
+module.exports.delete = async function(req, res){
+  try{
+    const deleteQuestion = await Question.findByIdAndDelete(req.params.id);
 
+    //check if question exists
+    if(!deleteQuestion){
+      return res.status(404).json({ success: false, error: 'Question not found' });
+    }
+
+    //Remove the question's id from all the corresponding options
+    await Option.updateMany({ question: req.params.id }, { $unset: {question: req.params.id}});
+    res.json({ success: true, message: 'Question deleted successfully'});
+  } catch(err){
+    console.log(err);
+    res.status(500).json({ success: false, error: 'Server error'});
+  }
 }
 
 //only option deletion enpoint
-module.exports.deleteOption = function(req, res){
+module.exports.deleteOption = async function(req, res){
+  console.log(req.params.id);
+    try{
 
+      //find the option to be deleted by id
+      const option = await Option.findById(req.params.id);
+      if(!option){
+        return res.status(404).json({ message: 'Option not found' });
+      }
+
+      //remove the option from the question's array
+
+      const questionId = option.question;
+      const update = { $pull: {options: req.params.id} };
+      const udpateQuestion = await Question.findByIdAndUpdate(
+        questionId,
+        update,
+        {new: true}
+      );
+      if(!udpateQuestion){
+        return res.status(404).json({message: 'Question not found'});
+      }
+
+      //delete the option document
+      await option.deleteOne();
+      res.status(200).json({ message: 'Option deleted successfully'});
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message: 'Server error'});
+    }
 }
 
 //add votes to the options
