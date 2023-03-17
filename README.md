@@ -4,6 +4,8 @@ Use "npm install/npm i" to install required libraries.
 
 Live on: http://3.138.117.246:3000
 
+Use postman for testing
+
 1). for creating a question: http://3.138.117.246:3000/questions/create (POST)
   => pass title and options.
   example: 
