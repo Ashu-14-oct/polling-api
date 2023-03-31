@@ -21,6 +21,7 @@ module.exports.create = async function(req, res){
     //sending response
     return res.status(200).json({
       success: true,
+      question_id: question._id,
       message: 'Question created successfully'
     });
   } catch (err) {
